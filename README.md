@@ -40,13 +40,11 @@ In order to use the wallet API, do the following:
 
 ```
 const {suiWallet} = useSuiWallet();
-
-Then, as long as the user is authenticated, calling suiWallet() will return
-an active reference to the widget API.
- 
-// this creates a wallet adapter that gives access to the 
 ```
 
+This composable exposes all the variables that are listed below. 
+The syntax varies for simplicity of use (of the composable).
+the `sui` prefixed is used on most provided variables to prevent 
 
 ### If you are not using the composition API
 
@@ -55,16 +53,27 @@ still inject all the variables that are provider by this plugin.
 
 The following variables are available:
 
-| Variable                                                        | Description                                                                                                                                                                                                                                                                                     |
-|-----------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| authProvider: String                                            | The wallet provider (sui wallet or ethos wallet) that the authentication happened with.                                                                                                                                                                                                         |
-| authAccount: String                                             | The sui address of the user that was authenticated.                                                                                                                                                                                                                                             |
-| suiWalletProviders: Array                                       | A list of supported sui wallet providers with their logos and window reference.                                                                                                                                                                                                                 |
-| requestWalletPermissions({provider, walletProviders}): Function | Call this to request permissions from the provider of your choice.<br/>This accepts 2 parameters, the "walletProviders" and the "provider" (the selected one)                                                                                                                                   |
-| suiWalletLogout(): Function                                     | Logs the wallet out and clears authentication.                                                                                                                                                                                                                                                  |
-| suiWallet(): Function                                           | If the wallet is authenticated, it returns a reference to access the extension. If not, it returns null.                                                                                                                                                                                        |
-| suiVerifyWalletPermissions(): Function                          | If the user is authenticated (meaning that the localStorage contains a user object), it verifies that the permissions are not revoked by the wallet and the user is still active.<br/>This runs automatically after load of the client, if you use the button somewhere inside the application. |
+| Variable                                                           | Description                                                                                                                                                                                                                                                                                     |
+|--------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| suiAuthProvider: String                                            | The wallet provider (sui wallet or ethos wallet) that the authentication happened with.                                                                                                                                                                                                         |
+| suiAuthAccount: String                                             | The sui address of the user that was authenticated.                                                                                                                                                                                                                                             |
+| suiWalletProviders: Array                                          | A list of supported sui wallet providers with their logos and window reference.                                                                                                                                                                                                                 |
+| suiRequestWalletPermissions({provider, walletProviders}): Function | Call this to request permissions from the provider of your choice.<br/>This accepts 2 parameters, the "walletProviders" and the "provider" (the selected one)                                                                                                                                   |
+| suiWalletLogout(): Function                                        | Logs the wallet out and clears authentication.                                                                                                                                                                                                                                                  |
+| suiWallet(): Function                                              | If the wallet is authenticated, it returns a reference to access the extension. If not, it returns `null`.                                                                                                                                                                                        |
+| suiVerifyWalletPermissions(): Function                             | If the user is authenticated (meaning that the localStorage contains a user object), it verifies that the permissions are not revoked by the wallet and the user is still active.<br/>This runs automatically after load of the client, if you use the button somewhere inside the application. |
 
+This is an example of how the "useSuiWallet" composable injects these variables.
+
+```
+const provider = inject("suiAuthProvider");
+const account = inject("suiAuthAccount");
+const suiWalletProviders = inject("suiWalletProviders");
+const requestWalletPermissions = inject("suiRequestWalletPermissions");
+const logout = inject("suiWalletLogout");
+const suiWallet = inject("suiWallet");
+const verifyPermissions = inject("suiVerifyWalletPermissions");
+```
 Upon authentication, the system saves 2 variables in the localStorage that you can use
 at any point.
 
@@ -80,13 +89,13 @@ at any point.
 
 ### SuiConnectButton:
 
-| Variable                     | Description                                                                                        |
-|------------------------------|----------------------------------------------------------------------------------------------------|
-| startToggled: Boolean        | Controls whether the "select a wallet provider" modal is active or not upon rendering. Default value is false. |
-| showInformationText: Boolean | Controls whether the information (wallet/address) will show in the left of the logout button       |
-| connectedWalletText: String  | Default value is "Connected Wallet"                                                                |
-| addressText: String          | Default value is "Address"                                                                         |
-| connectText: String          | Default value is "Connect Your Wallet"                                                             |
-| logoutText: String           | Default value is "Logout"                                                                          |
-| chooseProvider: String       | Default value is "Select wallet provider:"                                                         |
-| connect: String              | Default value is ""                                                          |
+| Variable                     | Description                                                                      |
+|------------------------------|----------------------------------------------------------------------------------|
+| startToggled: Boolean        | Controls whether the "select a wallet provider" modal is active or not upon rendering. Default value is `false`. |
+| showInformationText: Boolean | Controls whether the information (wallet/address) will show in the left of the logout button |
+| connectedWalletText: String  | Default value is `Connected Wallet`                                              |
+| addressText: String          | Default value is `Address`                                                       |
+| connectText: String          | Default value is `Connect Your Wallet`                                           |
+| logoutText: String           | Default value is `Logout`                                                        |
+| chooseProvider: String       | Default value is `Select wallet provider:`                                        |
+| connect: String              | Default value is ``                                                          |
