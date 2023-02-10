@@ -1,10 +1,12 @@
 <script setup>
 
 
-import {SuiConnectButton} from "../lib/main";
-import {useSuiWallet} from "../lib/main";
+import {SuiConnectButton, useSuiWallet} from "../lib/main";
 
-const suiWallet = useSuiWallet();
+const {suiWallet} = useSuiWallet();
+
+const wallet = suiWallet();
+
 
 </script>
 

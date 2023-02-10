@@ -36,6 +36,10 @@ import {useSuiWallet} from "../composables/useSuiWallet";
 
 
 const props = defineProps({
+  startToggled: {
+    type: Boolean,
+    default: false
+  },
   showInformationText:{
     type: Boolean,
     default: true
@@ -66,7 +70,7 @@ const props = defineProps({
   }
 })
 
-const toggleWalletAuthModal = ref(false);
+const toggleWalletAuthModal = ref(props.startToggled);
 const suiWallet = useSuiWallet();
 
 const hasWalletPermissions = computed(()=>{
