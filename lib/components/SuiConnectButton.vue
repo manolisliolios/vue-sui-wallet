@@ -36,14 +36,26 @@ import {useSuiWallet} from "../composables/useSuiWallet";
 
 
 const props = defineProps({
+  /*
+    Determines if the modal will instantly show upon rendering the button.
+    Default value is false
+   */
   startToggled: {
     type: Boolean,
     default: false
   },
+  /*
+    It determines whether to show information about the wallet that is connected
+    as well as the address of the user on the left of the button.
+    Default value is true.
+ */
   showInformationText:{
     type: Boolean,
     default: true
   },
+    /*
+      The following ones are text based that control the actual words used in the component
+   */
   connectedWalletText:{
     type: String,
     default: "Connected Wallet"
