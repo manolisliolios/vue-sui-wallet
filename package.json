@@ -1,7 +1,13 @@
 {
   "name": "vue-sui-wallet",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "author": "Manolis Liolios",
+  "keywords": [
+    "sui",
+    "vue",
+    "vue3",
+    "wallet adapter"
+  ],
   "files": ["dist"],
   "main": "./dist/vue-sui-wallet.umd.js",
   "module": "./dist/vue-sui-wallet.es.js",
