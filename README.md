@@ -33,11 +33,6 @@ import SuiConnectButton from "vue-sui-wallet";
 // in your template
 <sui-connect-button></sui-connect-button>
 ```
-
-#### Props available
-
-
-
 ### Access current account and API
 
 You can use the composable inside your "script setup" using the following code.
@@ -77,3 +72,21 @@ at any point.
 |--------------|-----------------------------------------------|
 | sui.address  | The address of the authenticated wallet.      |
 | sui.provider | The provider used to authenticate the wallet. |
+
+
+
+## Props available
+
+
+### SuiConnectButton:
+
+| Variable                     | Description                                                                                        |
+|------------------------------|----------------------------------------------------------------------------------------------------|
+| startToggled: Boolean        | Controls whether the "select a wallet provider" modal is active or not upon rendering. Default value is false. |
+| showInformationText: Boolean | Controls whether the information (wallet/address) will show in the left of the logout button       |
+| connectedWalletText: String  | Default value is "Connected Wallet"                                                                |
+| addressText: String          | Default value is "Address"                                                                         |
+| connectText: String          | Default value is "Connect Your Wallet"                                                             |
+| logoutText: String           | Default value is "Logout"                                                                          |
+| chooseProvider: String       | Default value is "Select wallet provider:"                                                         |
+| connect: String              | Default value is ""                                                          |
