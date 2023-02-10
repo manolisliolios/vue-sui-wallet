@@ -1,0 +1,27 @@
+{
+  "name": "vue-sui-wallet",
+  "version": "0.0.1",
+  "author": "Manolis Liolios",
+  "files": ["dist"],
+  "main": "./dist/vue-sui-wallet.umd.js",
+  "module": "./dist/vue-sui-wallet.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/vue-sui-wallet.es.js",
+      "require": "./dist/vue-sui-wallet.umd.js"
+    }
+  },
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.2.45"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "vite": "^4.0.0"
+  }
+}
