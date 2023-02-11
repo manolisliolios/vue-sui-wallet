@@ -4,20 +4,22 @@ A simple login/logout button that works with Vue3 & Sui/Ethos Wallet.
 
 It saves the account address that the user is connected to in the localStorage and maintains state when the app restarts.
 
+![](https://admin.edl.gr/uploads/readme_video_f5de174a57.gif)
+
 ## Installation
 
 1. Add the following code in the main.js file
 
 ```
 import VueSuiWallet from "vue-sui-wallet";
-import "vue-sui-wallet/dist/style.css"; 
+import "../node_modules/vue-sui-wallet/dist/style.css";
 
 // this can be safely skipped if already in your main.js
 const app = createApp(App);
 
 app.use(VueSuiWallet);
 
-// this is skipped, it should be on your main.js file.
+// this is probably skipped, it should be on your main.js file.
 app.mount('#app')
 ```
 ## Features
@@ -25,24 +27,25 @@ app.mount('#app')
 ### Login Button
 
 You can render a "connect to wallet" button using the following code.
-The component is already globally accessible by importing it in main.js.
+The component is global, no need to do direct import.
 
 ```
-// in your template
 <sui-connect-button></sui-connect-button>
 ```
+
 ### Access current account and API
 
 You can use the composable inside your "script setup" using the following code.
-In order to use the wallet API, do the following:
+In order to use the wallet's API, do the following:
 
 ```
-const {suiWallet} = useSuiWallet();
+const suiWallet = useSuiWallet();
 ```
 
 This composable exposes all the variables that are listed below. 
 The syntax varies for simplicity of use (of the composable).
-the `sui` prefixed is used on most provided variables to prevent 
+
+The `sui` prefix is used on all `provided` data to prevent namespace pollution.
 
 ### If you are not using the composition API
 
@@ -84,7 +87,6 @@ at any point.
 
 ## Props available
 
-
 ### SuiConnectButton:
 
 | Variable                     | Description                                                                      |
@@ -99,7 +101,7 @@ at any point.
 | connect: String              | Default value is ``                                                          |
 
 
-### Available Sui Wallet Functionality
+### Sui Wallet API
 
 You can easily use the sui wallet API by importing it like:
 

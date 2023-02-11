@@ -6,7 +6,7 @@ const vue = require('@vitejs/plugin-vue');
 export default defineConfig({
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'lib/main.js'),
+      entry: path.resolve(__dirname, 'lib/lib.js'),
       name: 'VueSuiWallet',
       fileName: (format) => `vue-sui-wallet.${format}.js`,
     },

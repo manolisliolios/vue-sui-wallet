@@ -30,7 +30,7 @@
 </template>
 <script setup>
 
-import {computed, inject, onMounted, onUnmounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import SuiConnectModal from "./SuiConnectModal.vue";
 import {useSuiWallet} from "../composables/useSuiWallet";
 
