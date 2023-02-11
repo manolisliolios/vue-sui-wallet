@@ -24,12 +24,10 @@ app.mount('#app')
 
 ### Login Button
 
-You can render a "connect to wallet" button using the following code:
+You can render a "connect to wallet" button using the following code.
+The component is already globally accessible by importing it in main.js.
 
 ```
-// Inside script
-import SuiConnectButton from "vue-sui-wallet";
-
 // in your template
 <sui-connect-button></sui-connect-button>
 ```
@@ -99,3 +97,43 @@ at any point.
 | logoutText: String           | Default value is `Logout`                                                        |
 | chooseProvider: String       | Default value is `Select wallet provider:`                                        |
 | connect: String              | Default value is ``                                                          |
+
+
+### Available Sui Wallet Functionality
+
+You can easily use the sui wallet API by importing it like:
+
+```
+const {suiWallet} = useSuiWallet();
+```
+
+Then, you can call any of the functions that sui wallet extension has.
+
+For example:
+
+```
+const {suiWallet} = useSuiWallet();
+
+
+// We always check if suiWallet() doesn't return null
+// If the account is not authenticated, it returns null
+// and it will break!
+if(suiWallet()){
+    suiWallet().getAccounts(); // that will return a list of accounts in the wallet.
+    suiWallet().executeMoveCall({...params});
+    suiWallet().executeSerializedMoveCall({...params});
+    suiWallet().hasPermissions();
+    suiWallet().send();
+}
+
+```
+
+A list of current functions supported.
+
+- `executeMoveCall`
+- `executeSerializedMoveCall`
+- `getAccounts`
+- `hasPermissions`
+- `requestPermissions`
+- `send`
+- `sendAndExecuteTransaction`
