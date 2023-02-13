@@ -1,8 +1,15 @@
 # Vue Sui Wallet
 
+[Explore the code on Github](https://github.com/manolisliolios/vue-sui-wallet)
+
 A simple login/logout button that works with Vue3 & Sui/Ethos Wallet.
 
-It saves the account address that the user is connected to in the localStorage and maintains state when the app restarts.
+It saves the connected wallet address and is persistent on app restarts (Similar to "log in/logout" auth behavior).
+
+**IMPORTANT NOTE:** This plugin doesn't wrap the API calls of the wallet. It only provides a reference
+to the `window.suiWallet` or `window.ethosWallet`. It needs a bit more effort to get it to 
+actually be a complete wallet wrapper. I might eventually do it once I have some free time.
+
 
 ![](https://admin.edl.gr/uploads/readme_video_f5de174a57.gif)
 
@@ -26,8 +33,8 @@ app.mount('#app')
 
 ### Login Button
 
-You can render a "connect to wallet" button using the following code.
-The component is global, no need to do direct import.
+The component is global, you don't need to import it per-component.
+You can render it using the following code.
 
 ```
 <sui-connect-button></sui-connect-button>
@@ -36,7 +43,6 @@ The component is global, no need to do direct import.
 ### Access current account and API
 
 You can use the composable inside your "script setup" using the following code.
-In order to use the wallet's API, do the following:
 
 ```
 const suiWallet = useSuiWallet();
@@ -49,8 +55,7 @@ The `sui` prefix is used on all `provided` data to prevent namespace pollution.
 
 ### If you are not using the composition API
 
-If you are not using the composition API, you can 
-still inject all the variables that are provider by this plugin.
+If you are not using the composition API, you can still inject all the variables that are provided by this plugin.
 
 The following variables are available:
 
@@ -63,6 +68,7 @@ The following variables are available:
 | suiWalletLogout(): Function                                        | Logs the wallet out and clears authentication.                                                                                                                                                                                                                                                  |
 | suiWallet(): Function                                              | If the wallet is authenticated, it returns a reference to access the extension. If not, it returns `null`.                                                                                                                                                                                        |
 | suiVerifyWalletPermissions(): Function                             | If the user is authenticated (meaning that the localStorage contains a user object), it verifies that the permissions are not revoked by the wallet and the user is still active.<br/>This runs automatically after load of the client, if you use the button somewhere inside the application. |
+
 
 This is an example of how the "useSuiWallet" composable injects these variables.
 

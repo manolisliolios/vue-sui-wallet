@@ -1,6 +1,6 @@
 {
   "name": "vue-sui-wallet",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "author": "Manolis Liolios",
   "keywords": [
     "sui",
@@ -8,7 +8,11 @@
     "vue3",
     "wallet adapter"
   ],
-  "files": ["dist"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/manolisliolios/vue-sui-wallet.git"
+  },
+  "files": ["dist", "LICENSE"],
   "main": "./dist/vue-sui-wallet.umd.js",
   "module": "./dist/vue-sui-wallet.es.js",
   "exports": {
