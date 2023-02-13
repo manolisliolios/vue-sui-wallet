@@ -1,7 +1,8 @@
 {
   "name": "vue-sui-wallet",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "author": "Manolis Liolios",
+  "license": "MIT",
   "keywords": [
     "sui",
     "vue",
