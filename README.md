@@ -2,17 +2,14 @@
 
 [Explore the code on Github](https://github.com/manolisliolios/vue-sui-wallet)
 
+![](https://admin.edl.gr/uploads/readme_video_f5de174a57.gif)
+
 A simple login/logout button that works with Vue3 & Sui/Ethos Wallet.
 
-It exposes the functionality of the wallet in an easy to use composable.
+It exposes the functionality of the wallet in an easy to use composable. You can also inject the functionality if you are using the Options API.
 
-You can also inject the functionality if you are using the Options API.
+It saves the connected wallet address and is persistent on app restarts (Similar to "log in/logout" auth behavior).
 
-It saves the connected wallet address and is persistent on app restarts 
-(Similar to "log in/logout" auth behavior).
-
-
-![](https://admin.edl.gr/uploads/readme_video_f5de174a57.gif)
 
 ## Table of Contents
 
