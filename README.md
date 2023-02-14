@@ -115,7 +115,7 @@ Then, you can call any of the functions that sui wallet extension has.
 | hasPermissions(provider:optional)                | Checks if the permissions list                                                                                                                 |
 | signAndExecuteTransaction({kind:optional, data}) | The de-facto way to send a transaction. "kind" has `default` value of `moveCall`.                                                              |
 | requestPermissions(provider:optional)            | Calls the default `requestPermissions` function of the wallet. Pass `provider` argument to use a different rather than the logged in provider. |
-| login()                                          | Default value is `Select wallet provider:`                                                                                                     |
+| login(provider)                                  | Initializes the login behavior using the provider and if it's successful, it maintains the logged in state client-side.                        |
 | api(provider:optional)                           | Get a reference to window["walletKey"]  (e.g. `window.suiWallet`) of the logged in provider, or the variable that is passed.                   |
 
 
