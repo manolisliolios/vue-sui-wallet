@@ -10,7 +10,6 @@ It exposes the functionality of the wallet in an easy to use composable. You can
 
 It saves the connected wallet address and is persistent on app restarts (Similar to "log in/logout" auth behavior).
 
-
 ## Table of Contents
 
 1. [Installation](#installation)
@@ -18,7 +17,7 @@ It saves the connected wallet address and is persistent on app restarts (Similar
    1. [Login Button](#login-button)
    2. [Access logged in account, provider and API](#access-logged-in-account-provider-and-api)
    3. [Options Api](#options-api)
-   4. [Client State](#client-state)
+   4. [Client State](#client-state-account-provider)
 3. [Sui Wallet API](#sui-wallet-api)
    1. [Optional Variables](#explaining-optional-in-variables)
    2. [Example](#example-of-usage)
@@ -62,8 +61,7 @@ You can use the composable inside your `<script setup>` using the following code
 const {suiWallet, account, provider} = useSuiWallet();
 ```
 
-This composable exposes all the variables that are listed below. 
-The syntax varies for simplicity of use (of the composable).
+Scroll to [Sui Wallet API](#sui-wallet-api) section to view more information.
 
 
 ### Options API
@@ -86,7 +84,7 @@ const account = inject("suiAuthAccount");
 const suiWallet = inject("suiWallet");
 ```
 
-### Client State
+### Client State (account, provider)
 
 Upon authentication, the system saves 2 variables in the localStorage that you can use
 at any point.
@@ -109,14 +107,14 @@ Then, you can call any of the functions that sui wallet extension has.
 
 | Function                                         | Description                                                                                                                                    |
 |--------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
-| verifyWalletIsValidAndInstalled(provider)        | Checks if the provider exists in the provider list and is installed on chrome.                                                                 |
-| logout()                                         | Removes state information from client. (Disconnects wallet)                                                                                    |
-| getAccounts()                                    | Returns a list of available accounts from the wallet. (login utilizes accounts[0])                                                             |
-| hasPermissions(provider:optional)                | Checks if the permissions list                                                                                                                 |
-| signAndExecuteTransaction({kind:optional, data}) | The de-facto way to send a transaction. "kind" has `default` value of `moveCall`.                                                              |
-| requestPermissions(provider:optional)            | Calls the default `requestPermissions` function of the wallet. Pass `provider` argument to use a different rather than the logged in provider. |
 | login(provider)                                  | Initializes the login behavior using the provider and if it's successful, it maintains the logged in state client-side.                        |
+| logout()                                         | Removes state information from client. (Disconnects wallet)                                                                                    |
+| signAndExecuteTransaction({kind:optional, data}) | The de-facto way to send a transaction. "kind" has `default` value of `moveCall`.                                                              |
+| getAccounts()                                    | Returns a list of available accounts from the wallet. (login utilizes accounts[0])                                                             |
 | api(provider:optional)                           | Get a reference to window["walletKey"]  (e.g. `window.suiWallet`) of the logged in provider, or the variable that is passed.                   |
+| hasPermissions(provider:optional)                | Checks if the permissions list                                                                                                                 |
+| verifyWalletIsValidAndInstalled(provider)        | Checks if the provider exists in the provider list and is installed on chrome.                                                                 |
+| requestPermissions(provider:optional)            | Calls the default `requestPermissions` function of the wallet. Pass `provider` argument to use a different rather than the logged in provider. |
 
 
 ### Explaining "optional" in variables
