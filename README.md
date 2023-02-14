@@ -18,6 +18,15 @@ It saves the connected wallet address and is persistent on app restarts
 
 1. [Installation](#installation)
 2. [Features](#features)
+   1. [Login Button](#login-button)
+   2. [Access logged in account, provider and API](#access-logged-in-account-provider-and-api)
+   3. [Options Api](#options-api)
+   4. [Client State](#client-state)
+3. [Sui Wallet API](#sui-wallet-api)
+   1. [Optional Variables](#explaining-optional-in-variables)
+   2. [Example](#example-of-usage)
+4. [Props available](#props-available)
+   1. [SuiConnectButton](#suiconnectbutton)
 
 ## Installation
 
@@ -60,7 +69,7 @@ This composable exposes all the variables that are listed below.
 The syntax varies for simplicity of use (of the composable).
 
 
-### If you are not using the composition API
+### Options API
 
 If you are not using the composition API, you can still inject all the variables that are provided by this plugin.
 
@@ -79,6 +88,9 @@ const provider = inject("suiAuthProvider");
 const account = inject("suiAuthAccount");
 const suiWallet = inject("suiWallet");
 ```
+
+### Client State
+
 Upon authentication, the system saves 2 variables in the localStorage that you can use
 at any point.
 
@@ -110,7 +122,7 @@ Then, you can call any of the functions that sui wallet extension has.
 | api(provider:optional)                           | Get a reference to window["walletKey"]  (e.g. `window.suiWallet`) of the logged in provider, or the variable that is passed.                   |
 
 
-#### Explaining "optional" in variables
+### Explaining "optional" in variables
 
 If there is `optional` in the function signature, then if you pass a provider, it will apply the
 functions using that provider key, otherwise it will fallback to the "logged in" provider.
@@ -121,7 +133,7 @@ If I am logged in with suiWallet and I call: `suiWallet.api()`, this will
 return the `window.suiWallet` reference.
 However, if I call `suiWallet.api(ethosWallet)`, that will return a the `window.ethosWallet` reference.
 
-#### Example of usage
+### Example of usage
 
 Using the composable as it follows, you can Mint an NFT by SUI.
 
@@ -153,7 +165,7 @@ suiWallet.signAndExecuteTransaction({
 
 ## Props available
 
-### SuiConnectButton:
+### SuiConnectButton
 
 | Variable                     | Description                                                                      |
 |------------------------------|----------------------------------------------------------------------------------|
