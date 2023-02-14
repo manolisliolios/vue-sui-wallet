@@ -105,15 +105,15 @@ const {suiWallet} = useSuiWallet();
 
 Then, you can call any of the functions that sui wallet extension has.
 
-| Function                                         | Description                                                                                                                                    |
-|--------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
-| login(provider)                                  | Initializes the login behavior using the provider and if it's successful, it maintains the logged in state client-side.                        |
-| logout()                                         | Removes state information from client. (Disconnects wallet)                                                                                    |
-| signAndExecuteTransaction({kind:optional, data}) | The de-facto way to send a transaction. "kind" has `default` value of `moveCall`.                                                              |
-| getAccounts()                                    | Returns a list of available accounts from the wallet. (login utilizes accounts[0])                                                             |
-| api(provider:optional)                           | Get a reference to window["walletKey"]  (e.g. `window.suiWallet`) of the logged in provider, or the variable that is passed.                   |
-| hasPermissions(provider:optional)                | Checks if the permissions list                                                                                                                 |
-| verifyWalletIsValidAndInstalled(provider)        | Checks if the provider exists in the provider list and is installed on chrome.                                                                 |
+| Function                                         | Description                                                                                                                                   |
+|--------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| login(provider)                                  | Initializes the login behavior using the provider and if it's successful, it maintains the logged in state client-side.                       |
+| logout()                                         | Removes state information from client. (Disconnects wallet)                                                                                   |
+| signAndExecuteTransaction({kind:optional, data}) | The de-facto way to send a transaction. "kind" has `default` value of `moveCall`.                                                             |
+| getAccounts()                                    | Returns a list of available accounts from the wallet. (login utilizes accounts[0])                                                            |
+| api(provider:optional)                           | Get a reference to window["walletKey"]  (e.g. `window.suiWallet`) of the logged in provider, or the variable that is passed.                  |
+| hasPermissions(provider:optional)                | Checks if the wallet has granted permissions. (default provider is the logged in one)                                                         |
+| verifyWalletIsValidAndInstalled(provider)        | Checks if the provider exists in the provider list and is installed on chrome.                                                                |
 | requestPermissions(provider:optional)            | Calls the default `requestPermissions` function of the wallet. Pass `provider` argument to use a different rather than the logged in provider. |
 
 
