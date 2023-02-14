@@ -4,14 +4,20 @@
 
 A simple login/logout button that works with Vue3 & Sui/Ethos Wallet.
 
-It saves the connected wallet address and is persistent on app restarts (Similar to "log in/logout" auth behavior).
+It exposes the functionality of the wallet in an easy to use composable.
 
-**IMPORTANT NOTE:** This plugin doesn't wrap the API calls of the wallet. It only provides a reference
-to the `window.suiWallet` or `window.ethosWallet`. It needs a bit more effort to get it to 
-actually be a complete wallet wrapper. I might eventually do it once I have some free time.
+You can also inject the functionality if you are using the Options API.
+
+It saves the connected wallet address and is persistent on app restarts 
+(Similar to "log in/logout" auth behavior).
 
 
 ![](https://admin.edl.gr/uploads/readme_video_f5de174a57.gif)
+
+## Table of Contents
+
+1. [Installation](#installation)
+2. [Features](#features)
 
 ## Installation
 
@@ -34,24 +40,25 @@ app.mount('#app')
 ### Login Button
 
 The component is global, you don't need to import it per-component.
-You can render it using the following code.
+You can render it using the following code. 
 
 ```
 <sui-connect-button></sui-connect-button>
 ```
 
-### Access current account and API
+[Find a list of the button's props here](#props-available)
 
-You can use the composable inside your "script setup" using the following code.
+### Access logged in account, provider and API
+
+You can use the composable inside your `<script setup>` using the following code.
 
 ```
-const suiWallet = useSuiWallet();
+const {suiWallet, account, provider} = useSuiWallet();
 ```
 
 This composable exposes all the variables that are listed below. 
 The syntax varies for simplicity of use (of the composable).
 
-The `sui` prefix is used on all `provided` data to prevent namespace pollution.
 
 ### If you are not using the composition API
 
@@ -59,27 +66,18 @@ If you are not using the composition API, you can still inject all the variables
 
 The following variables are available:
 
-| Variable                                                           | Description                                                                                                                                                                                                                                                                                     |
-|--------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| suiAuthProvider: String                                            | The wallet provider (sui wallet or ethos wallet) that the authentication happened with.                                                                                                                                                                                                         |
-| suiAuthAccount: String                                             | The sui address of the user that was authenticated.                                                                                                                                                                                                                                             |
-| suiWalletProviders: Array                                          | A list of supported sui wallet providers with their logos and window reference.                                                                                                                                                                                                                 |
-| suiRequestWalletPermissions({provider, walletProviders}): Function | Call this to request permissions from the provider of your choice.<br/>This accepts 2 parameters, the "walletProviders" and the "provider" (the selected one)                                                                                                                                   |
-| suiWalletLogout(): Function                                        | Logs the wallet out and clears authentication.                                                                                                                                                                                                                                                  |
-| suiWallet(): Function                                              | If the wallet is authenticated, it returns a reference to access the extension. If not, it returns `null`.                                                                                                                                                                                        |
-| suiVerifyWalletPermissions(): Function                             | If the user is authenticated (meaning that the localStorage contains a user object), it verifies that the permissions are not revoked by the wallet and the user is still active.<br/>This runs automatically after load of the client, if you use the button somewhere inside the application. |
+| Variable                | Description                                                                             |
+|-------------------------|-----------------------------------------------------------------------------------------|
+| suiAuthProvider: String | The wallet provider (sui wallet or ethos wallet) that the authentication happened with. |
+| suiAuthAccount: String  | The sui address of the user that was authenticated.                                     |                                                                                                                                                                                                                                  |
+| suiWallet: Object       | The list of wallet available functions listed [here](#sui-wallet-api).                  |
 
 
 This is an example of how the "useSuiWallet" composable injects these variables.
-
 ```
 const provider = inject("suiAuthProvider");
 const account = inject("suiAuthAccount");
-const suiWalletProviders = inject("suiWalletProviders");
-const requestWalletPermissions = inject("suiRequestWalletPermissions");
-const logout = inject("suiWalletLogout");
 const suiWallet = inject("suiWallet");
-const verifyPermissions = inject("suiVerifyWalletPermissions");
 ```
 Upon authentication, the system saves 2 variables in the localStorage that you can use
 at any point.
@@ -89,6 +87,68 @@ at any point.
 | sui.address  | The address of the authenticated wallet.      |
 | sui.provider | The provider used to authenticate the wallet. |
 
+
+## Sui Wallet API
+
+You can easily use the sui wallet API by importing it like:
+
+```
+const {suiWallet} = useSuiWallet();
+```
+
+Then, you can call any of the functions that sui wallet extension has.
+
+| Function                                         | Description                                                                                                                                    |
+|--------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| verifyWalletIsValidAndInstalled(provider)        | Checks if the provider exists in the provider list and is installed on chrome.                                                                 |
+| logout()                                         | Removes state information from client. (Disconnects wallet)                                                                                    |
+| getAccounts()                                    | Returns a list of available accounts from the wallet. (login utilizes accounts[0])                                                             |
+| hasPermissions(provider:optional)                | Checks if the permissions list                                                                                                                 |
+| signAndExecuteTransaction({kind:optional, data}) | The de-facto way to send a transaction. "kind" has `default` value of `moveCall`.                                                              |
+| requestPermissions(provider:optional)            | Calls the default `requestPermissions` function of the wallet. Pass `provider` argument to use a different rather than the logged in provider. |
+| login()                                          | Default value is `Select wallet provider:`                                                                                                     |
+| api(provider:optional)                           | Get a reference to window["walletKey"]  (e.g. `window.suiWallet`) of the logged in provider, or the variable that is passed.                   |
+
+
+#### Explaining "optional" in variables
+
+If there is `optional` in the function signature, then if you pass a provider, it will apply the
+functions using that provider key, otherwise it will fallback to the "logged in" provider.
+
+An example:
+
+If I am logged in with suiWallet and I call: `suiWallet.api()`, this will 
+return the `window.suiWallet` reference.
+However, if I call `suiWallet.api(ethosWallet)`, that will return a the `window.ethosWallet` reference.
+
+#### Example of usage
+
+Using the composable as it follows, you can Mint an NFT by SUI.
+
+```
+// This will work only if you are already logged in using your wallet.
+// Otherwise, an Error is thrown.
+
+const {suiWallet} = useSuiWallet();
+
+suiWallet.signAndExecuteTransaction({
+  data:{
+    packageObjectId: '0x0000000000000000000000000000000000000002',
+    module: 'devnet_nft',
+    function: 'mint',
+    typeArguments: [],
+    arguments: ["Example NFT","An NFT created by Sui Wallet",
+      "ipfs://QmZPWWy5Si54R3d26toaqRiqvCH7HkGdXkxwUgCm2oKKM2?filename=img-sq-01.png"],
+    gasBudget: 5000
+  }}
+).then(res=>{
+  alert('Transaction completed successfully. <br>' +res.certificate.transactionDigest+ '')
+  console.log(res);
+}).catch(e=>{
+  console.log(e);
+});
+
+```
 
 
 ## Props available
@@ -105,40 +165,3 @@ at any point.
 | logoutText: String           | Default value is `Logout`                                                        |
 | chooseProvider: String       | Default value is `Select wallet provider:`                                        |
 | connect: String              | Default value is ``                                                          |
-
-
-### Sui Wallet API
-
-You can easily use the sui wallet API by importing it like:
-
-```
-const {suiWallet} = useSuiWallet();
-```
-
-Then, you can call any of the functions that sui wallet extension has.
-
-For example:
-
-```
-const {suiWallet} = useSuiWallet();
-
-
-// We always check if suiWallet() doesn't return null
-// If the account is not authenticated, it returns null
-// and it will break!
-if(suiWallet()){
-    suiWallet().getAccounts(); // that will return a list of accounts in the wallet.
-    suiWallet().signAndExecuteTransaction({...params});
-    suiWallet().hasPermissions();
-    suiWallet().send();
-}
-
-```
-
-A list of current functions supported.
-
-- `getAccounts`
-- `hasPermissions`
-- `requestPermissions`
-- `send`
-- `sendAndExecuteTransaction`

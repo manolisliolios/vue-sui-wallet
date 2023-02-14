@@ -4,10 +4,10 @@
 
     <div v-if="showInformationText" v-show="hasWalletPermissions" class="sui-account-details">
         <p class="wallet-text">
-          {{connectedWalletText}}: {{suiWallet.provider}}
+          {{connectedWalletText}}: {{provider}}
         </p>
         <p class="address-text">
-          {{addressText}}: {{suiWallet.account}}
+          {{addressText}}: {{account}}
         </p>
     </div>
 
@@ -83,16 +83,17 @@ const props = defineProps({
 })
 
 const toggleWalletAuthModal = ref(props.startToggled);
-const suiWallet = useSuiWallet();
+const {account, provider, suiWallet} = useSuiWallet();
 
 const hasWalletPermissions = computed(()=>{
-  return !!suiWallet.account.value
+  return !!account.value
 });
 
 const verifyWalletPermissions = () => {
-  suiWallet.verifyPermissions().then((status)=>{
-    if(!status.isLoggedIn) logout();
 
+
+  suiWallet.hasPermissions().then( status => {
+    if(!status.isLoggedIn) logout();
   });
 }
 
@@ -107,9 +108,9 @@ onUnmounted(()=>{
 })
 
 const logout = () => {
-  suiWallet.provider.value = null;
-  suiWallet.account.value = null;
-  suiWallet.logout();
+  provider.value = null;
+  account.value = null;
+  suiWallet.logout(); // logout.
 }
 </script>
 

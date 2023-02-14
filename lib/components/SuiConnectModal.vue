@@ -5,7 +5,7 @@
       <div v-html="x_btn" class="close-btn ease-in-out duration-300"
            @click="$emit('closeModal')"></div>
       <p class="text-center mb-6">{{ chooseProvider }}</p>
-      <button v-for="provider in suiWallet.suiWalletProviders" :key="provider.key"
+      <button v-for="provider in walletProviders" :key="provider.key"
               class="provider-btn ease-in-out duration-300" @click="requestWalletAccess(provider.key)">
         <span v-html="provider.logo" class="logo-icon"></span>
         {{ connect }} {{provider.title}}
@@ -59,6 +59,7 @@
   right: 0;
   bottom: 0;
   left: 0;
+  z-index:9999;
   justify-content: center;
   align-items: center;
 }
@@ -100,6 +101,7 @@
 import {x_btn} from "./icons";
 import {useSuiWallet} from "../composables/useSuiWallet";
 import {ref} from "vue";
+import walletProviders from "../helpers/walletProviders";
 
 const emit = defineEmits(['closeModal']);
 
@@ -118,18 +120,18 @@ const requestWalletAccess = (provider)=>{
   error.value = null // reset error
   suiWallet.provider.value = provider;
 
-  suiWallet.requestWalletPermissions({
-    provider: suiWallet.provider.value,
-    walletProviders: suiWallet.suiWalletProviders
+  suiWallet.suiWallet.login({
+    provider: suiWallet.provider.value
   }).then(res=>{
-
-    if(res.error){
+    if(!res || res?.error){
       error.value = res.error;
       return;
     }
     suiWallet.account.value = res.userAddress;
     suiWallet.provider.value = res.provider;
     emit('closeModal');
+  }).catch(e=>{
+    console.log('error:' +e);
   })
 
 };
