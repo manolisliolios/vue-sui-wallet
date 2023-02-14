@@ -128,8 +128,7 @@ const {suiWallet} = useSuiWallet();
 // and it will break!
 if(suiWallet()){
     suiWallet().getAccounts(); // that will return a list of accounts in the wallet.
-    suiWallet().executeMoveCall({...params});
-    suiWallet().executeSerializedMoveCall({...params});
+    suiWallet().signAndExecuteTransaction({...params});
     suiWallet().hasPermissions();
     suiWallet().send();
 }
@@ -138,8 +137,6 @@ if(suiWallet()){
 
 A list of current functions supported.
 
-- `executeMoveCall`
-- `executeSerializedMoveCall`
 - `getAccounts`
 - `hasPermissions`
 - `requestPermissions`
