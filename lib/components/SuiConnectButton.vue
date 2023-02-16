@@ -4,10 +4,10 @@
 
     <div v-if="showInformationText" v-show="hasWalletPermissions" class="sui-account-details">
         <p class="wallet-text">
-          {{connectedWalletText}}: {{provider}}
+          {{connectedWalletText}}: {{suiProvider}}
         </p>
         <p class="address-text">
-          {{addressText}}: {{account}}
+          {{addressText}}: {{suiAddress}}
         </p>
     </div>
 
@@ -24,13 +24,14 @@
     <sui-connect-modal v-show="toggleWalletAuthModal"
                        :connect="connect"
                        :choose-provider="chooseProvider"
+                       :no-wallet-extension-installed="noWalletExtensionInstalled"
                        @closeModal="toggleWalletAuthModal = false;"></sui-connect-modal>
   </div>
 
 </template>
 <script setup>
 
-import {computed, onMounted, onUnmounted, ref} from "vue";
+import {computed, ref} from "vue";
 import SuiConnectModal from "./SuiConnectModal.vue";
 import {useSuiWallet} from "../composables/useSuiWallet";
 
@@ -79,39 +80,49 @@ const props = defineProps({
   connect: {
     type: String,
     default: ""
+  },
+  noWalletExtensionInstalled:{
+    type: String,
+    default: 'No wallet extensions found. Maybe try Sui\'s default one?'
   }
 })
 
 const toggleWalletAuthModal = ref(props.startToggled);
-const {account, provider, suiWallet} = useSuiWallet();
+const {suiWallet, suiAddress, suiProvider} = useSuiWallet();
 
 const hasWalletPermissions = computed(()=>{
-  return !!account.value
+  return !!suiAddress.value
 });
-
-const verifyWalletPermissions = () => {
-
-
-  suiWallet.hasPermissions().then( status => {
-    if(!status.isLoggedIn) logout();
-  });
-}
-
-onMounted(()=>{
-  // we verify wallet permissions after window has loaded to make sure that
-  // the wallet extensions have received their state and window[walletProvider] doesnt return undefined.
-  window.addEventListener('load', verifyWalletPermissions);
-});
-
-onUnmounted(()=>{
-  window.removeEventListener('load', verifyWalletPermissions);
-})
 
 const logout = () => {
-  provider.value = null;
-  account.value = null;
-  suiWallet.logout(); // logout.
+  suiAddress.value = null;
+
+  suiWallet.logout().then(()=>{
+    suiWallet.activeProvider = null; // clear activeProvider too.
+  }).catch(); // logout.
 }
+
+// This one verifies that the logged in state is actually valid by
+// trying to re-login the user upon login. It actually re-initializes the state
+// with the current active address & Provider.
+const verifyLoggedInStatus = () => {
+
+  if(!suiWallet.activeProvider) return;
+
+  // console.info('There is an active wallet connection from previous session. Attempting to re-establish.');
+
+  // login with current provider.
+  suiWallet.login().then(res=>{
+    if(res.error) return logout();
+    suiAddress.value = res.account;
+  }).catch(e => {
+    logout(); // logout if we fail the re-connect phase.
+  })
+}
+
+verifyLoggedInStatus();
+
+
 </script>
 
 <style scoped>
