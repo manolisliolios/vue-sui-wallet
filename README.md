@@ -2,7 +2,7 @@
 
 [Explore the code on Github](https://github.com/manolisliolios/vue-sui-wallet)
 
-![](https://admin.edl.gr/uploads/readme_video_f5de174a57.gif)
+![](https://admin.edl.gr/uploads/sui_wallet_adapter_v3_7e3cec7f1d.gif)
 
 A simple login/logout button that works with Vue3 & Sui Wallets (support all sui-kit based wallets).
 
