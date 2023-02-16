@@ -1,7 +1,7 @@
 # Vue Sui Wallet
 
 [Explore the code on Github](https://github.com/manolisliolios/vue-sui-wallet) |
-[View example](https://vue-sui-wallet.liosoftware.com/)
+[View demo](https://vue-sui-wallet.liosoftware.com/)
 
 ![](https://admin.edl.gr/uploads/sui_wallet_adapter_v3_7e3cec7f1d.gif)
 
