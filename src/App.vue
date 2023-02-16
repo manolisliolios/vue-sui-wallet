@@ -7,7 +7,6 @@ const {suiWallet, suiAddress, suiProvider} = useSuiWallet();
 const testWallet = () => {
 
   suiWallet.signAndExecuteTransaction({
-    kind: "moveCall",
       data:{
         packageObjectId: '0x0000000000000000000000000000000000000002',
         module: 'devnet_nft',
