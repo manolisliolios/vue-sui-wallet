@@ -1,14 +1,14 @@
 <template>
-  <div class="modal-wrap">
+  <div class="modal-wrap" @keydown.esc="$emit('closeModal')">
     <div class="modal-backdrop " @click="$emit('closeModal')"></div>
     <div class="modal" :class="bodyClasses">
       <div v-html="x_btn" class="close-btn ease-in-out duration-300"
            @click="$emit('closeModal')"></div>
       <p class="text-center mb-6">{{ chooseProvider }}</p>
-      <button v-for="provider in walletProviders" :key="provider.key"
-              class="provider-btn ease-in-out duration-300" @click="requestWalletAccess(provider.key)">
-        <span v-html="provider.logo" class="logo-icon"></span>
-        {{ connect }} {{provider.title}}
+      <button v-for="provider in wallet.walletProviders" :key="provider.key"
+              class="provider-btn ease-in-out duration-300" @click="requestWalletAccess(provider)">
+        <img :src="provider.icon" class="logo-icon">
+        {{ connect }} {{provider.name}}
       </button>
 
       <p v-if="error" class="error">
@@ -48,9 +48,10 @@
 .provider-btn:hover{
   filter:brightness(95%);
 }
-.logo-icon svg{
+.logo-icon{
   width: 20px;
   height: 20px;
+  margin-right: 5px;
 }
 .modal-wrap{
   display: flex;
@@ -77,7 +78,10 @@
   padding: 2.5rem;
   background-color: #ffffff;
   width: 90%;
-  border-radius: 0.5rem;
+  border-radius: 2rem;
+
+  max-height:60%;
+  overflow-y:auto;
 }
 @media screen and (min-width: 767px) {
   .modal{
@@ -86,10 +90,15 @@
 }
 .close-btn{
   z-index:1;
+  background-color:#e5e7eb;
+  color:#111827;
+  border-radius:100%;
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: 1rem;
+  right: 1rem;
   cursor: pointer;
+  display:flex;
+  padding:.3rem;
 }
 .close-btn:hover{
   transform: rotate(12deg);
@@ -101,7 +110,6 @@
 import {x_btn} from "./icons";
 import {useSuiWallet} from "../composables/useSuiWallet";
 import {ref} from "vue";
-import walletProviders from "../helpers/walletProviders";
 
 const emit = defineEmits(['closeModal']);
 
@@ -112,29 +120,25 @@ const props = defineProps({
   chooseProvider: String
 })
 
-const suiWallet = useSuiWallet();
+const wallet = useSuiWallet();
 
 // request wallet access from injected helper
 // and assign the active state to global provided variables to maintain vue state
 const requestWalletAccess = (provider)=>{
   error.value = null // reset error
-  suiWallet.provider.value = provider;
+  wallet.suiWallet.login({provider}).then(res=>{
 
-  suiWallet.suiWallet.login({
-    provider: suiWallet.provider.value
-  }).then(res=>{
     if(!res || res?.error){
       error.value = res.error;
       return;
     }
-    suiWallet.account.value = res.userAddress;
-    suiWallet.provider.value = res.provider;
+    wallet.suiWallet.activeProvider = res.provider;
+    wallet.suiProvider.value = res.provider.name;
+    wallet.suiAddress.value = res.account;
     emit('closeModal');
   }).catch(e=>{
     console.log('error:' +e);
   })
 
 };
-
-
 </script>

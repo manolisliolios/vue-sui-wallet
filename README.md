@@ -4,7 +4,7 @@
 
 ![](https://admin.edl.gr/uploads/readme_video_f5de174a57.gif)
 
-A simple login/logout button that works with Vue3 & Sui/Ethos Wallet.
+A simple login/logout button that works with Vue3 & Sui Wallets (support all sui-kit based wallets).
 
 It exposes the functionality of the wallet in an easy to use composable. You can also inject the functionality if you are using the Options API.
 
@@ -70,11 +70,11 @@ If you are not using the composition API, you can still inject all the variables
 
 The following variables are available:
 
-| Variable                | Description                                                                             |
-|-------------------------|-----------------------------------------------------------------------------------------|
-| suiAuthProvider: String | The wallet provider (sui wallet or ethos wallet) that the authentication happened with. |
-| suiAuthAccount: String  | The sui address of the user that was authenticated.                                     |                                                                                                                                                                                                                                  |
-| suiWallet: Object       | The list of wallet available functions listed [here](#sui-wallet-api).                  |
+| Variable                | Description                                                                            |
+|-------------------------|----------------------------------------------------------------------------------------|
+| suiAuthProvider: String | The wallet provider (any of the available ones) that the authentication happened with. |
+| suiAuthAccount: String  | The sui address of the user that was authenticated.                                    |                                                                                                                                                                                                                                  |
+| suiWallet: Object       | The list of wallet available functions listed [here](#sui-wallet-api).                 |
 
 
 This is an example of how the "useSuiWallet" composable injects these variables.

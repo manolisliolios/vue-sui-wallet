@@ -1,6 +1,6 @@
 {
   "name": "vue-sui-wallet",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "author": "Manolis Liolios",
   "license": "MIT",
   "keywords": [
@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/manolisliolios/vue-sui-wallet.git"
   },
-  "files": ["dist", "LICENSE"],
+  "files": ["dist", "lib", "LICENSE"],
   "main": "./dist/vue-sui-wallet.umd.js",
   "module": "./dist/vue-sui-wallet.es.js",
   "exports": {
@@ -25,7 +25,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "vite build && npm publish"
   },
   "dependencies": {
     "vue": "^3.2.45"
