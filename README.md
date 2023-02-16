@@ -6,9 +6,12 @@
 
 A simple login/logout button that works with Vue3 & Sui Wallets (support all sui-kit based wallets).
 
-It exposes the functionality of the wallet in an easy to use composable. You can also inject the functionality if you are using the Options API.
+It exposes the functionality of the wallet in an easy to use composable. 
+You can also inject the functionality if you are using the Options API.
 
 It saves the connected wallet address and is persistent on app restarts (Similar to "log in/logout" auth behavior).
+
+[//]: # (>  **Wallet is compatible with wallet-standard.**)
 
 ## Table of Contents
 
@@ -70,11 +73,12 @@ If you are not using the composition API, you can still inject all the variables
 
 The following variables are available:
 
-| Variable                | Description                                                                            |
-|-------------------------|----------------------------------------------------------------------------------------|
-| suiAuthProvider: String | The wallet provider (any of the available ones) that the authentication happened with. |
-| suiAuthAccount: String  | The sui address of the user that was authenticated.                                    |                                                                                                                                                                                                                                  |
-| suiWallet: Object       | The list of wallet available functions listed [here](#sui-wallet-api).                 |
+| Variable               | Description                                                                                   |
+|------------------------|-----------------------------------------------------------------------------------------------|
+| suiProvider: String    | The wallet provider's name (any of the available ones) that the authentication happened with. |
+| suiAddress: String     | The sui address of the user that was authenticated.                                           |                                                                                                                                                                                                                                  |
+| suiWallet: Object      | The list of wallet available functions listed [here](#sui-wallet-api).                        |
+| walletProviders: Array | A list of wallet providers that are wallet-standard.                                          | 
 
 
 This is an example of how the "useSuiWallet" composable injects these variables.
@@ -82,6 +86,7 @@ This is an example of how the "useSuiWallet" composable injects these variables.
 const provider = inject("suiAuthProvider");
 const account = inject("suiAuthAccount");
 const suiWallet = inject("suiWallet");
+const walletProviders = inject("suiWalletProviders");
 ```
 
 ### Client State (account, provider)
@@ -89,10 +94,10 @@ const suiWallet = inject("suiWallet");
 Upon authentication, the system saves 2 variables in the localStorage that you can use
 at any point.
 
-| Variable     | Description                                   |
-|--------------|-----------------------------------------------|
-| sui.address  | The address of the authenticated wallet.      |
-| sui.provider | The provider used to authenticate the wallet. |
+| Variable     | Description                                          |
+|--------------|------------------------------------------------------|
+| sui.address  | The address of the authenticated wallet.             |
+| sui.provider | The provider's name used to authenticate the wallet. |
 
 
 ## Sui Wallet API
@@ -105,28 +110,13 @@ const {suiWallet} = useSuiWallet();
 
 Then, you can call any of the functions that sui wallet extension has.
 
-| Function                                         | Description                                                                                                                                   |
-|--------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
-| login(provider)                                  | Initializes the login behavior using the provider and if it's successful, it maintains the logged in state client-side.                       |
-| logout()                                         | Removes state information from client. (Disconnects wallet)                                                                                   |
-| signAndExecuteTransaction({kind:optional, data}) | The de-facto way to send a transaction. "kind" has `default` value of `moveCall`.                                                             |
-| getAccounts()                                    | Returns a list of available accounts from the wallet. (login utilizes accounts[0])                                                            |
-| api(provider:optional)                           | Get a reference to window["walletKey"]  (e.g. `window.suiWallet`) of the logged in provider, or the variable that is passed.                  |
-| hasPermissions(provider:optional)                | Checks if the wallet has granted permissions. (default provider is the logged in one)                                                         |
-| verifyWalletIsValidAndInstalled(provider)        | Checks if the provider exists in the provider list and is installed on chrome.                                                                |
-| requestPermissions(provider:optional)            | Calls the default `requestPermissions` function of the wallet. Pass `provider` argument to use a different rather than the logged in provider. |
-
-
-### Explaining "optional" in variables
-
-If there is `optional` in the function signature, then if you pass a provider, it will apply the
-functions using that provider key, otherwise it will fallback to the "logged in" provider.
-
-An example:
-
-If I am logged in with suiWallet and I call: `suiWallet.api()`, this will 
-return the `window.suiWallet` reference.
-However, if I call `suiWallet.api(ethosWallet)`, that will return a the `window.ethosWallet` reference.
+| Function                                         | Description                                                                                                                     |
+|--------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| login(provider)                                  | Initializes the login behavior using the provider and if it's successful, it maintains the logged in state client-side.         |
+| logout()                                         | Removes state information from client and calls disconnect functionality if it exists on the wallet features. |
+| signAndExecuteTransaction({kind:optional, data}) | The de-facto way to send a transaction. "kind" has `default` value of `moveCall`.                                               |
+| getAccount()                                     | Returns the available account of the active wallet. Throws error if it doesn't exist.                                           |
+| connect(provider)                                | You can call this to execute the "standard:connect" functionality of a provided provider                                        |
 
 ### Example of usage
 
@@ -162,13 +152,14 @@ suiWallet.signAndExecuteTransaction({
 
 ### SuiConnectButton
 
-| Variable                     | Description                                                                      |
-|------------------------------|----------------------------------------------------------------------------------|
+| Variable                     | Description                                                                                                      |
+|------------------------------|------------------------------------------------------------------------------------------------------------------|
 | startToggled: Boolean        | Controls whether the "select a wallet provider" modal is active or not upon rendering. Default value is `false`. |
-| showInformationText: Boolean | Controls whether the information (wallet/address) will show in the left of the logout button |
-| connectedWalletText: String  | Default value is `Connected Wallet`                                              |
-| addressText: String          | Default value is `Address`                                                       |
-| connectText: String          | Default value is `Connect Your Wallet`                                           |
-| logoutText: String           | Default value is `Logout`                                                        |
-| chooseProvider: String       | Default value is `Select wallet provider:`                                        |
-| connect: String              | Default value is ``                                                          |
+| showInformationText: Boolean | Controls whether the information (wallet/address) will show in the left of the logout button                     |
+| connectedWalletText: String  | Default value is `Connected Wallet`                                                                              |
+| addressText: String          | Default value is `Address`                                                                                       |
+| connectText: String          | Default value is `Connect Your Wallet`                                                                           |
+| logoutText: String           | Default value is `Logout`                                                                                        |
+| chooseProvider: String       | Default value is `Select wallet provider:`                                                                       |
+| connect: String              | Default value is ``                                                                                              |
+| noWalletExtensionInstalled: String              | Default value is `No wallet extensions found. Maybe try Sui's default one?`                                        |

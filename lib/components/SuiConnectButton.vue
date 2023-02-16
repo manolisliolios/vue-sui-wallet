@@ -24,6 +24,7 @@
     <sui-connect-modal v-show="toggleWalletAuthModal"
                        :connect="connect"
                        :choose-provider="chooseProvider"
+                       :no-wallet-extension-installed="noWalletExtensionInstalled"
                        @closeModal="toggleWalletAuthModal = false;"></sui-connect-modal>
   </div>
 
@@ -79,6 +80,10 @@ const props = defineProps({
   connect: {
     type: String,
     default: ""
+  },
+  noWalletExtensionInstalled:{
+    type: String,
+    default: 'No wallet extensions found. Maybe try Sui\'s default one?'
   }
 })
 
@@ -92,7 +97,7 @@ const hasWalletPermissions = computed(()=>{
 const logout = () => {
   suiAddress.value = null;
 
-  suiWallet.disconnect().then(()=>{
+  suiWallet.logout().then(()=>{
     suiWallet.activeProvider = null; // clear activeProvider too.
   }).catch(); // logout.
 }
@@ -107,7 +112,7 @@ const verifyLoggedInStatus = () => {
   // console.info('There is an active wallet connection from previous session. Attempting to re-establish.');
 
   // login with current provider.
-  suiWallet.login({}).then(res=>{
+  suiWallet.login().then(res=>{
     if(res.error) return logout();
     suiAddress.value = res.account;
   }).catch(e => {

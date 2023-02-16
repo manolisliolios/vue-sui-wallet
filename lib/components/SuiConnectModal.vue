@@ -11,6 +11,12 @@
         {{ connect }} {{provider.name}}
       </button>
 
+      <div v-if="wallet.walletProviders.length === 0 " class="no-extensions-installed">
+        {{noWalletExtensionInstalled}}
+        <a href="https://chrome.google.com/webstore/detail/sui-wallet/opcgpfmipidbgpenhmajoajpbobppdil"
+           target="_blank">Sui Wallet</a>
+      </div>
+
       <p v-if="error" class="error">
         {{error}}
       </p>
@@ -47,6 +53,9 @@
 }
 .provider-btn:hover{
   filter:brightness(95%);
+}
+.no-extensions-installed{
+  text-align: center;
 }
 .logo-icon{
   width: 20px;
@@ -117,7 +126,8 @@ const error = ref(null);
 const props = defineProps({
   bodyClasses: String,
   connect: String,
-  chooseProvider: String
+  chooseProvider: String,
+  noWalletExtensionInstalled: String
 })
 
 const wallet = useSuiWallet();
@@ -126,7 +136,7 @@ const wallet = useSuiWallet();
 // and assign the active state to global provided variables to maintain vue state
 const requestWalletAccess = (provider)=>{
   error.value = null // reset error
-  wallet.suiWallet.login({provider}).then(res=>{
+  wallet.suiWallet.login(provider).then(res=>{
 
     if(!res || res?.error){
       error.value = res.error;
