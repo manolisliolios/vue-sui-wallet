@@ -33,7 +33,11 @@ It saves the connected wallet address and is persistent on app restarts (Similar
 1. Install using your package manager(npm, yarn, pnpm)
 ```
 npm i vue-sui-wallet
+```
+```
 yarn add vue-sui-wallet
+```
+```
 pnpm add vue-sui-wallet
 ```
 
